@@ -3,6 +3,7 @@
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-router-dom": "^5.1.2",
     "react-stars": "^2.2.5"
   },
   "devDependencies": {

@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Shelf extends Component {
-    render() {
-        return (
-            <div className="bookshelf">
-                <h1>{this.props.shelfName}</h1>
-            </div>
-        )
-    }
+const Shelf = (props) => {
+    return (
+        <div className="bookshelf">
+            <h1>{props.shelfName}</h1>
+        </div>
+    )
 }
 
 export default Shelf;
