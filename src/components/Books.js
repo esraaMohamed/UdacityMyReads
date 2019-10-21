@@ -12,19 +12,28 @@ class Books extends Component {
     const currentlyReading = [];
     const wantToRead = [];
     const read = [];
+    let newResult = {};
     result.currentlyReading.map(id => {
-      return get(id).then(book => currentlyReading.push(book))
+      return get(id).then(book => {
+          currentlyReading.push(book);
+          newResult.currentlyReading = currentlyReading;
+        })
     });
     result.wantToRead.map(id => {
-      return get(id).then(book => wantToRead.push(book))
+      return get(id).then(book => {
+          wantToRead.push(book);
+          newResult.wantToRead = wantToRead;
+        })
     });
     result.read.map(async id => {
-      return get(id).then(book => read.push(book))
+      return get(id).then(book => {
+          read.push(book);
+          newResult.read = read;
+        })
     });
-    const newResult = { currentlyReading, wantToRead, read };
-    this.setState({ books: newResult })
-    console.log("new result", newResult)
-    console.log("books state", this.state.books)
+    this.setState({ books: newResult });
+    console.log("new result", newResult);
+    console.log("books state", this.state.books);
     this.props.handleBookUpdate(this.state.books);
   };
 

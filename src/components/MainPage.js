@@ -11,7 +11,7 @@ class MainPage extends Component {
             wantToRead: [],
             read: []
         }
-    }
+    };
 
     componentDidMount() {
         this.setState({loading: true})
@@ -25,10 +25,10 @@ class MainPage extends Component {
         .finally(() => {
             this.setState({loading: false})
         })
-    }
+    };
 
-    filterBooks = (bks) => {
-        bks.map(book => {
+    filterBooks = (books) => {
+        books.map(book => {
             if(book.shelf === "currentlyReading") {
                 const newCurrentlyReadingArray = this.state.books.currentlyReading;
                 newCurrentlyReadingArray.push(book);
@@ -49,14 +49,23 @@ class MainPage extends Component {
             }
             return "Invalid shelf"
         })
-    }
+    };
 
     handleBookUpdate = (newBooks) => {
-        console.log("new freakin books", newBooks)
+        console.log("new books", newBooks)
         this.setState({books: newBooks})
-    }
+    };
+
+    componentWillMount(){
+        console.log("will mount", this.state.books)
+    };
+
+    componentDidUpdate(){
+        console.log("did update", this.state.books)
+    };
 
     render() {
+        console.log("render", this.state.books);
         return (
             <div className="list-books">
                 <div className="list-books-title">
