@@ -4,9 +4,9 @@ import Shelf from "./Shelf";
 import { get } from "../BooksAPI";
 
 class Books extends Component {
-  state = {
-    books: this.props.books
-  };
+  // state = {
+  //   books: this.props.books
+  // };
 
   handleChange = (result) => {
     const currentlyReading = [];
@@ -17,28 +17,30 @@ class Books extends Component {
       return get(id).then(book => {
           currentlyReading.push(book);
           newResult.currentlyReading = currentlyReading;
-        })
+          this.props.handleBookUpdate(newResult);
+      })
     });
     result.wantToRead.map(id => {
       return get(id).then(book => {
           wantToRead.push(book);
           newResult.wantToRead = wantToRead;
-        })
+          this.props.handleBookUpdate(newResult);
+      })
     });
     result.read.map(async id => {
       return get(id).then(book => {
           read.push(book);
           newResult.read = read;
-        })
+          this.props.handleBookUpdate(newResult);
+      })
     });
-    this.setState({ books: newResult });
+    //this.setState({ books: newResult });
     console.log("new result", newResult);
-    console.log("books state", this.state.books);
-    this.props.handleBookUpdate(this.state.books);
+    //console.log("books state", this.state.books);
   };
 
   render() {
-    const { books } = this.state;
+    const { books } = this.props;
     return (
       <div className="list-books-content">
         <Shelf shelfName="Currently Reading" />
