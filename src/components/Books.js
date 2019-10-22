@@ -4,9 +4,6 @@ import Shelf from "./Shelf";
 import { get } from "../BooksAPI";
 
 class Books extends Component {
-  // state = {
-  //   books: this.props.books
-  // };
 
   handleChange = (result) => {
     const currentlyReading = [];
@@ -34,9 +31,6 @@ class Books extends Component {
           this.props.handleBookUpdate(newResult);
       })
     });
-    //this.setState({ books: newResult });
-    console.log("new result", newResult);
-    //console.log("books state", this.state.books);
   };
 
   render() {

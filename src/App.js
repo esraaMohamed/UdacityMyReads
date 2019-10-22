@@ -1,14 +1,13 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
 import './App.css'
-import MainPage from './components/MainPage'
+import Main from './components/Main'
 import {BrowserRouter} from "react-router-dom";
 
 class BooksApp extends React.Component {
     render() {
         return (
             <BrowserRouter>
-              <MainPage/>
+              <Main/>
             </BrowserRouter>
         )
     }
