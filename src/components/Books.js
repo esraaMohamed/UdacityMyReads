@@ -24,7 +24,7 @@ class Books extends Component {
           this.props.handleBookUpdate(newResult);
       })
     });
-    result.read.map(async id => {
+    result.read.map(id => {
       return get(id).then(book => {
           read.push(book);
           newResult.read = read;

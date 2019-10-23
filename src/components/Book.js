@@ -23,7 +23,7 @@ class Book extends Component {
                     <div className="book-cover"
                          style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}>
                     </div>
-                    <ChangeShelves currentShelf={book.shelf} handleOnChangeShelf={this.handleOnChangeShelf} /> 
+                    <ChangeShelves currentShelf={book.shelf ? book.shelf : 'none'} handleOnChangeShelf={this.handleOnChangeShelf} /> 
                 </div>      
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">{book.author}</div>
