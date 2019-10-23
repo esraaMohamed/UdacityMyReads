@@ -87,7 +87,7 @@ class SearchPage extends Component {
             {!this.state.errorState &&
               this.state.searchResult.map(book => (
                 <li key={book.id}>
-                  <Book book={book} handleChange={(shelf) => this.handleShelfChange} />
+                  <Book book={book} handleChange={(books) => this.handleShelfChange} />
                 </li>
               ))}
           </ol>
