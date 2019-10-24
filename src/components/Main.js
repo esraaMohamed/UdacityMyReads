@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import SearchPage from "./SearchPage";
 import BooksDisplay from "./BooksDisplay";
-import { getAll } from "../BooksAPI";
+import {get, getAll} from "../BooksAPI";
 
 class Main extends Component {
   state = {
     loading: false,
     errorState: null,
+    booksIndex: {},
     books: {
       currentlyReading: [],
       wantToRead: [],
@@ -59,18 +60,45 @@ class Main extends Component {
     });
   };
 
-  handleBookUpdate = newBooks => {
-    this.setState({ books: newBooks });
+  handleBookUpdate = (newBooks) => {
+    const currentlyReading = [];
+    const wantToRead = [];
+    const read = [];
+    let newResult = {};
+    newBooks.currentlyReading && newBooks.currentlyReading.map(id => {
+      return get(id).then(book => {
+        currentlyReading.push(book);
+        newResult.currentlyReading = currentlyReading;
+        this.setState({books: newResult})
+        this.setState({booksIndex: newBooks})
+      })
+    });
+    newBooks.wantToRead && newBooks.wantToRead.map(id => {
+      return get(id).then(book => {
+        wantToRead.push(book);
+        newResult.wantToRead = wantToRead;
+        this.setState({books: newResult})
+        this.setState({booksIndex: newBooks})
+      })
+    });
+    newBooks.read && newBooks.read.map(id => {
+      return get(id).then(book => {
+        read.push(book);
+        newResult.read = read;
+        this.setState({books: newResult})
+        this.setState({booksIndex: newBooks})
+      })
+    });
   };
 
   render() {
     return (
       <Switch>
         <Route exact path="/">
-          <BooksDisplay books={this.state.books} handleBookUpdate={this.handleBookUpdate}/>
+          <BooksDisplay books={this.state.books} handleBookUpdate={this.handleBookUpdate} />
         </Route>
         <Route path="/search">
-          <SearchPage handleBookUpdate={this.handleBookUpdate} filter={this.filterBooks} books={this.state.books}/>
+          <SearchPage handleBookUpdate={this.handleBookUpdate} booksIndex={this.state.booksIndex}/>
         </Route>
       </Switch>
     );

@@ -1,36 +1,11 @@
 import React, { Component } from "react";
 import Book from "./Book";
 import Shelf from "./Shelf";
-import { get } from "../BooksAPI";
 
 class Books extends Component {
 
   handleChange = (result) => {
-    const currentlyReading = [];
-    const wantToRead = [];
-    const read = [];
-    let newResult = {};
-    result.currentlyReading.map(id => {
-      return get(id).then(book => {
-          currentlyReading.push(book);
-          newResult.currentlyReading = currentlyReading;
-          this.props.handleBookUpdate(newResult);
-      })
-    });
-    result.wantToRead.map(id => {
-      return get(id).then(book => {
-          wantToRead.push(book);
-          newResult.wantToRead = wantToRead;
-          this.props.handleBookUpdate(newResult);
-      })
-    });
-    result.read.map(id => {
-      return get(id).then(book => {
-          read.push(book);
-          newResult.read = read;
-          this.props.handleBookUpdate(newResult);
-      })
-    });
+      this.props.handleBookUpdate(result);
   };
 
   render() {

@@ -5,12 +5,10 @@ import { Link } from 'react-router-dom'
 class BooksDisplay extends Component {
     state = {
         loading: false,
-        bookIndex: {}
       };
     
     handleBookUpdate = (newBooks) => {
         this.props.handleBookUpdate(newBooks);
-
     };
 
     render() {
