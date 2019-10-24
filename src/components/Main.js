@@ -40,6 +40,9 @@ class Main extends Component {
           currentlyReading: newCurrentlyReadingArray
         };
         this.setState({ books: newBooks });
+        const updatedBookIndex = this.state.booksIndex
+        updatedBookIndex[book.id] = book.shelf
+        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "wantToRead") {
         const newWantToReadArray = this.state.books.wantToRead;
         newWantToReadArray.push(book);
@@ -48,11 +51,17 @@ class Main extends Component {
           wantToRead: newWantToReadArray
         };
         this.setState({ books: newBooks });
+        const updatedBookIndex = this.state.booksIndex
+        updatedBookIndex[book.id] = book.shelf
+        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "read") {
         const newReadArray = this.state.books.read;
         newReadArray.push(book);
         const newBooks = { ...this.state.books, read: newReadArray };
         this.setState({ books: newBooks });
+        const updatedBookIndex = this.state.booksIndex
+        updatedBookIndex[book.id] = book.shelf
+        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "none") {
         console.log("None");
       }
@@ -69,26 +78,25 @@ class Main extends Component {
       return get(id).then(book => {
         currentlyReading.push(book);
         newResult.currentlyReading = currentlyReading;
-        this.setState({books: newResult})
-        this.setState({booksIndex: newBooks})
+        this.setState({books: newResult});
       })
     });
     newBooks.wantToRead && newBooks.wantToRead.map(id => {
       return get(id).then(book => {
         wantToRead.push(book);
         newResult.wantToRead = wantToRead;
-        this.setState({books: newResult})
-        this.setState({booksIndex: newBooks})
+        this.setState({books: newResult});
       })
     });
     newBooks.read && newBooks.read.map(id => {
       return get(id).then(book => {
         read.push(book);
         newResult.read = read;
-        this.setState({books: newResult})
-        this.setState({booksIndex: newBooks})
+        this.setState({books: newResult});
       })
     });
+    console.log(newBooks)
+    this.setState({booksIndex: newBooks});
   };
 
   render() {

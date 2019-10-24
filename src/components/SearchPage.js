@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { search } from "../BooksAPI";
+import React, {Component} from "react";
+import {Link} from "react-router-dom";
+import {search, update} from "../BooksAPI";
 import Book from "./Book";
 
 class SearchPage extends Component {
     state = {
         searchResult: [],
+        booksIndex: this.props.booksIndex,
         errorState: null
     };
 
@@ -13,6 +14,7 @@ class SearchPage extends Component {
         search(query, maxResult)
             .then(result => {
                 this.setState({searchResult: result});
+                this.findBooks()
                 this.setState({errorState: null});
             })
             .catch(error => {
@@ -30,6 +32,19 @@ class SearchPage extends Component {
     displayError = error => {
         return <p>{error}</p>;
     };
+
+    findBooks = () =>  {
+        const { searchResult, booksIndex } = this.state;
+        for(const result of searchResult){
+            console.log("result", result)
+            console.log("booksIndex", booksIndex)
+            console.log(result.id in booksIndex)
+            console.log(booksIndex[result.title])
+            if(result.id in booksIndex){
+                console.log("result in books index")
+            }
+        }
+    }
 
     render() {
         return (
