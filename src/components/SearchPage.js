@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import {search, update} from "../BooksAPI";
+import {get, search, update} from "../BooksAPI";
 import Book from "./Book";
 
 class SearchPage extends Component {
@@ -11,11 +11,12 @@ class SearchPage extends Component {
     };
 
     searchForBooks = (query, maxResult) => {
+        console.log("query", query)
+        let newResults = [];
         search(query, maxResult)
             .then(result => {
-                this.setState({searchResult: result});
-                this.findBooks()
-                this.setState({errorState: null});
+                newResults = this.findBooks(result)
+                console.log("then new results ",newResults)
             })
             .catch(error => {
                 this.setState({errorState: error});
@@ -33,17 +34,38 @@ class SearchPage extends Component {
         return <p>{error}</p>;
     };
 
-    findBooks = () =>  {
-        const { searchResult, booksIndex } = this.state;
-        for(const result of searchResult){
-            console.log("result", result)
-            console.log("booksIndex", booksIndex)
-            console.log(result.id in booksIndex)
-            console.log(booksIndex[result.title])
-            if(result.id in booksIndex){
-                console.log("result in books index")
-            }
+    findBooks = (searchResult) =>  {
+        let { booksIndex } = this.state;
+        let newResult = []
+        for(const index in booksIndex) {
+            newResult = this.updateSearchResults(index, searchResult, booksIndex);
+            console.log("in find books", newResult)
+           // this.setState({searchResult: newResult})
         }
+        return newResult;
+    }
+
+    updateSearchResults = (index, searchResult, booksIndex) => {
+        console.log("search results in update", searchResult)
+        let newResult = searchResult;
+        searchResult.map(result => {
+            return (result.id === index) ?
+                update(result, booksIndex[index])
+                    .then(updatedBooks => {
+                        console.log("in update");
+                        this.setState({booksIndex: updatedBooks})
+                        get(result.id).then(book => {
+                            book["shelf"] = booksIndex[index]
+                            newResult = searchResult.filter(b => b.id !== book.id)
+                            newResult.push(book)
+                            this.setState({searchResult: newResult});
+                            console.log(this.state.searchResult)
+                        });
+                    })
+                : null
+        });
+        console.log("after update", newResult)
+       return newResult;
     }
 
     render() {

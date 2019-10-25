@@ -8,7 +8,11 @@ class Main extends Component {
   state = {
     loading: false,
     errorState: null,
-    booksIndex: {},
+    booksIndex: {
+      currentlyReading: [],
+      wantToRead: [],
+      read: []
+    },
     books: {
       currentlyReading: [],
       wantToRead: [],
@@ -95,7 +99,6 @@ class Main extends Component {
         this.setState({books: newResult});
       })
     });
-    console.log(newBooks)
     this.setState({booksIndex: newBooks});
   };
 
