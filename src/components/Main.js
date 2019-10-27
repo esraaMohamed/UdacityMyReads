@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import SearchPage from "./SearchPage";
 import BooksDisplay from "./BooksDisplay";
 import {get, getAll} from "../BooksAPI";
+import SearchPage from "./SearchPage";
 
 class Main extends Component {
   state = {
     loading: false,
     errorState: null,
-    booksIndex: {
-      currentlyReading: [],
-      wantToRead: [],
-      read: []
-    },
     books: {
       currentlyReading: [],
       wantToRead: [],
@@ -44,9 +39,6 @@ class Main extends Component {
           currentlyReading: newCurrentlyReadingArray
         };
         this.setState({ books: newBooks });
-        const updatedBookIndex = this.state.booksIndex
-        updatedBookIndex[book.id] = book.shelf
-        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "wantToRead") {
         const newWantToReadArray = this.state.books.wantToRead;
         newWantToReadArray.push(book);
@@ -55,17 +47,11 @@ class Main extends Component {
           wantToRead: newWantToReadArray
         };
         this.setState({ books: newBooks });
-        const updatedBookIndex = this.state.booksIndex
-        updatedBookIndex[book.id] = book.shelf
-        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "read") {
         const newReadArray = this.state.books.read;
         newReadArray.push(book);
         const newBooks = { ...this.state.books, read: newReadArray };
         this.setState({ books: newBooks });
-        const updatedBookIndex = this.state.booksIndex
-        updatedBookIndex[book.id] = book.shelf
-        this.setState({booksIndex: updatedBookIndex})
       } else if (book.shelf === "none") {
         console.log("None");
       }
@@ -109,7 +95,7 @@ class Main extends Component {
           <BooksDisplay books={this.state.books} handleBookUpdate={this.handleBookUpdate} />
         </Route>
         <Route path="/search">
-          <SearchPage handleBookUpdate={this.handleBookUpdate} booksIndex={this.state.booksIndex}/>
+          <SearchPage handleBookUpdate={this.handleBookUpdate} books={this.state.books}/>
         </Route>
       </Switch>
     );

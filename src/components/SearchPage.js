@@ -1,29 +1,55 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import {get, search, update} from "../BooksAPI";
+import {search} from "../BooksAPI";
 import Book from "./Book";
 
 class SearchPage extends Component {
     state = {
         searchResult: [],
-        booksIndex: this.props.booksIndex,
-        errorState: null
+        errorState: null,
+        books: this.props.books,
+        query: ""
     };
 
     searchForBooks = (query, maxResult) => {
-        console.log("query", query)
-        let newResults = [];
-        search(query, maxResult)
-            .then(result => {
-                newResults = this.findBooks(result)
-                console.log("then new results ",newResults)
-            })
-            .catch(error => {
+        this.setState(() => ({
+            query: query.trim()
+        }));
+        const {books, errorState} = this.state;
+        if (query !== "") {
+            try {
+                search(query, maxResult)
+                    .then(results => {
+                        if (results.length) {
+                            for (const result of results) {
+                                for (const book of books.currentlyReading) {
+                                    if (result.id === book.id) {
+                                        result["shelf"] = "currentlyReading";
+                                    }
+                                }
+                                for (const book of books.wantToRead) {
+                                    if (result.id === book.id) {
+                                        result["shelf"] = "wantToRead";
+                                    }
+                                }
+                                for (const book of books.read) {
+                                    if (result.id === book.id) {
+                                        result["shelf"] = "read";
+                                    }
+                                }
+                            }
+                            this.setState({searchResult: results})
+                        } else {
+                            this.displayError("Result set was empty")
+                        }
+                    })
+            } catch (error) {
                 this.setState({errorState: error});
-            })
-            .then(error => {
                 this.displayError(this.state.errorState);
-            });
+            }
+        } else {
+            this.displayError(errorState)
+        }
     };
 
     handleShelfChange = (result) => {
@@ -34,57 +60,26 @@ class SearchPage extends Component {
         return <p>{error}</p>;
     };
 
-    findBooks = (searchResult) =>  {
-        let { booksIndex } = this.state;
-        let newResult = []
-        for(const index in booksIndex) {
-            newResult = this.updateSearchResults(index, searchResult, booksIndex);
-            console.log("in find books", newResult)
-           // this.setState({searchResult: newResult})
-        }
-        return newResult;
-    }
-
-    updateSearchResults = (index, searchResult, booksIndex) => {
-        console.log("search results in update", searchResult)
-        let newResult = searchResult;
-        searchResult.map(result => {
-            return (result.id === index) ?
-                update(result, booksIndex[index])
-                    .then(updatedBooks => {
-                        console.log("in update");
-                        this.setState({booksIndex: updatedBooks})
-                        get(result.id).then(book => {
-                            book["shelf"] = booksIndex[index]
-                            newResult = searchResult.filter(b => b.id !== book.id)
-                            newResult.push(book)
-                            this.setState({searchResult: newResult});
-                            console.log(this.state.searchResult)
-                        });
-                    })
-                : null
-        });
-        console.log("after update", newResult)
-       return newResult;
-    }
-
     render() {
+        const {searchResult, errorState} = this.state;
         return (
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link to="/" className="close-search"/>
                     <div className="search-books-input-wrapper">
-                        <input
-                            type="text"
-                            placeholder="Search by title or author"
-                            onChange={event => this.searchForBooks(event.target.value, 5)}
-                        />
+                        <form>
+                            <input
+                                type="text"
+                                placeholder="Search by title or author"
+                                onChange={event => this.searchForBooks(event.target.value, 6)}
+                            />
+                        </form>
                     </div>
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {!this.state.errorState &&
-                        this.state.searchResult.map(book => (
+                        {!errorState && searchResult &&
+                        searchResult.map(book => (
                             <li key={book.id}>
                                 <Book book={book} handleChange={this.handleShelfChange}/>
                             </li>

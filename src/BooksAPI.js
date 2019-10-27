@@ -40,10 +40,7 @@ export const search = (query, maxResults) =>
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ query, maxResults })
-  })
-    .then(res => {
-      if (res.status === 403) {
-        throw new Error("Not 200 response");
-      } else return res.json();
+  }).then(res => {
+        return res.json();
     })
     .then(data => data.books);

@@ -1,6 +1,12 @@
 # MyReads Project
 
-This is the the my reads project for the React Nanodegree.
+This is the completed MyReads project for the Udacity React Developer course. 
+All functionality required by the rubric has been added. 
+
+# Basic Functionality
+Main screen displaying bookshelves for Currently reading, Want to read, and Read books.
+Search screen to find new books and add new books to shelves.
+A control on each book, on any screen, that allows for setting the book shelf.
 
 ## TL;DR
 
