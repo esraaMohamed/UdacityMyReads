@@ -10,7 +10,7 @@ A control on each book, on any screen, that allows for setting the book shelf.
 
 ## TL;DR
 
-To get started developing right away:
+To get the app started all you need to do is: 
 
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
